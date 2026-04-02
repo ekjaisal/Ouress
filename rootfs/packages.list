@@ -1,0 +1,43 @@
+# BSD 3-Clause License
+# ____________________
+# 
+# Copyright © 2026, Jaisal E. K.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+# 
+# 1. Redistributions of source code must retain the above copyright notice, this
+#    list of conditions and the following disclaimer.
+# 
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+# 
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Ouress Curated External Package Manifest
+# --------------------------------------------------------------------------------
+# Format: BINARY_NAME  FILE_TYPE  URL  SHA256_HASH
+# Supported FILE_TYPEs: tar.gz, tgz, tar.xz, zip, raw
+# --------------------------------------------------------------------------------
+
+mlr    tar.gz  https://github.com/johnkerl/miller/releases/download/v6.17.0/miller-6.17.0-linux-amd64.tar.gz            5a3588754d42cea7f46c5fe38ce1bf50c6043e8eefe3656acf5bbd2fd86c1ea4
+xsv    tar.gz  https://github.com/BurntSushi/xsv/releases/download/0.13.0/xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz   d36b1be0f008d6597c2437e764fbe720eb7557f8980e0b03ca709e1020b5c52b
+gron   tgz     https://github.com/tomnomnom/gron/releases/download/v0.7.1/gron-linux-amd64-0.7.1.tgz                    ca0335826b02b044fa05d7e951521e45c6ced1c381a73ed5803450088e18bf22
+yq     raw     https://github.com/mikefarah/yq/releases/download/v4.52.5/yq_linux_amd64                                 75d893a0d5940d1019cb7cdc60001d9e876623852c31cfc6267047bc31149fa9
+jqp    tar.gz  https://github.com/noahgorstein/jqp/releases/download/v0.8.0/jqp_Linux_x86_64.tar.gz                     66b2a100ff114a8bbe45a8e6052269fb2f4c61de4edd5ea57b763bf2ec7c6593
+xidel  tar.gz  https://github.com/benibela/xidel/releases/download/Xidel_0.9.8/xidel-0.9.8.linux64.tar.gz               cf6d7391a73dbadf7c74e22206ea3f9f4f77f77d0e9d6e32d15ec400b1b843ef
+rush   tar.gz  https://github.com/shenwei356/rush/releases/download/v0.8.0/rush_linux_amd64.tar.gz                      cbf2df788c44ec134c9ba9ae7d3c9aaccb05690b481776795c618e42da7af045

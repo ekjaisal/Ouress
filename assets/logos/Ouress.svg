@@ -1,0 +1,21 @@
+<svg width="100%" viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="cc">
+      <circle cx="340" cy="340" r="296"/>
+    </clipPath>
+  </defs>
+
+  <circle cx="340" cy="340" r="296" fill="#4A0028"/>
+
+  <g clip-path="url(#cc)">
+    <circle cx="340" cy="340" r="296" fill="#4A0028"/>
+    <circle cx="340" cy="340" r="252" fill="#560030"/>
+    <circle cx="340" cy="340" r="210" fill="#62003C"/>
+    <circle cx="340" cy="340" r="170" fill="#70004A"/>
+    <circle cx="340" cy="340" r="130" fill="#7E0056"/>
+    <circle cx="340" cy="340" r="90"  fill="#8E0062"/>
+    <circle cx="340" cy="340" r="50"  fill="#A0006E"/>
+  </g>
+
+  <circle cx="340" cy="340" r="296" fill="none" stroke="#6A0044" stroke-width="2"/>
+</svg>

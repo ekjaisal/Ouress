@@ -1,0 +1,11 @@
+/rootfs/build/
+/releases/
+/bin/
+/cli/lib/
+/cli/backup/
+*.exe
+*.ress
+*.o
+*.ppu
+*.compiled
+*.obj
