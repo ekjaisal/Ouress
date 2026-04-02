@@ -108,11 +108,11 @@ The architectural essence of Ouress can thus be summarised as a research applian
 
 Ouress provides a zero-friction command-line utility for Windows, eliminating the need for manual WSL configuration or PowerShell scripting.
 
-1. Download the installer from the [Releases](https://github.com/ekjaisal/Ouress/releases/latest) page or from https://ouress.jaisal.in.
+1. Download the installer from the [Releases](https://github.com/ekjaisal/Ouress/releases/latest) page or from [https://ouress.jaisal.in](https://ouress.jaisal.in).
 
 2. Run the installer to deploy the command-line utility alongside the base `.ress` image.
 
-   **Note:** Windows SmartScreen may flag the installer as an unrecognised application. Provided the installer is sourced from the locations specified in step 1, bypass the prompt by clicking **More info** → **Run anyway**. For added assurance, [verify](https://github.com/ekjaisal/Ouress#verification) the `SHA256SUMS`.
+   **Note:** Windows SmartScreen may flag the installer as an unrecognised application. Provided the installer is sourced from the locations specified in step 1, bypass the prompt by clicking **More info** → **Run anyway**. For added assurance, [verify](#verification) the `SHA256SUMS`.
 
 3. Launch Ouress from the Start Menu.
 
@@ -297,7 +297,7 @@ sudo apt update && sudo apt install -y debootstrap xz-utils
 
 Ouress is built on [*Debian* GNU/Linux](https://www.debian.org), leveraging the project’s proven stability and extensive package ecosystem. The Ouress project is not affiliated with *Debian*. [*Debian*](https://www.debian.org/trademark)<sup>®</sup> is a registered trademark owned by [Software in the Public Interest, Inc.](https://www.spi-inc.org/projects/debian); [GNU](https://www.gnu.org) is a trademark of the [Free Software Foundation](https://www.fsf.org); and [Linux](https://www.linuxmark.org)<sup>®</sup> is a registered trademark of [Linus Torvalds](https://github.com/torvalds) in the US and other countries.
 
-The command-line management utility for the [Windows Subsystem for Linux (WSL2)](https://github.com/microsoft/WSL) is built using the [Lazarus IDE](https://www.lazarus-ide.org/) and [Free Pascal Compiler](https://www.freepascal.org/).
+The command-line management utility for the [Windows Subsystem for Linux (WSL2)](https://github.com/microsoft/WSL) is built using the [Lazarus IDE](https://www.lazarus-ide.org/) and the [Free Pascal Compiler](https://www.freepascal.org).
 
 A huge thanks to the thousands of volunteer developers who make the *Debian* GNU/Linux operating system, the Lazarus IDE, and the Free Pascal Compiler possible, as well as the engineering teams behind the Windows Subsystem for Linux.
 
