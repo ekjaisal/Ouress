@@ -305,6 +305,6 @@ The project has benefited significantly from the assistance of Anthropic’s [Cl
 
 ## License
 
-The Ouress build scripts, Windows command-line management utility, and environment configurations are under the BSD 3-Clause License. The full project is provided “as-is”, without any warranties. Please see the [LICENSE](LICENSE) file for details.
+The Ouress build scripts, Windows command-line management utility, and environment configurations are under the BSD 3-Clause License. The full project is provided “as is”, without any warranties. Please see the [LICENSE](LICENSE) file for details.
 
 The project bundles and distributes several third-party open-source libraries, binaries, and resources. These components are governed entirely by their respective licenses, and the Ouress project claims no copyright over them. System tools and utilities installed via the *Debian* package manager (`apt`) retain their original license texts within the root filesystem at `/usr/share/doc/*/copyright`. Please see the accompanying [NOTICE](NOTICE) file for details.
