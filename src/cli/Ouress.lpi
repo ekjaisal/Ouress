@@ -30,7 +30,7 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="..\bin\Ouress"/>
+            <Filename Value="..\..\bin\Ouress"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -84,7 +84,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\bin\Ouress"/>
+      <Filename Value="..\..\bin\Ouress"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

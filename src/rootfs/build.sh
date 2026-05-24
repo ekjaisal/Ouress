@@ -78,9 +78,9 @@ fi
 
 echo "==> Resolving Ouress documentation..."
 mkdir -p "${ROOTFS_DIR}/usr/share/doc/ouress"
-sed '1s/^\xEF\xBB\xBF//' ../LICENSE > "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
+sed '1s/^\xEF\xBB\xBF//' ../../LICENSE > "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
 echo -e "\n\nThird-Party Notices\n___________________\n" >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
-sed '1s/^\xEF\xBB\xBF//' ../NOTICE >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
+sed '1s/^\xEF\xBB\xBF//' ../../NOTICE >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
 
 echo "==> Applying release metadata..."
 mkdir -p "${ROOTFS_DIR}/etc/ouress"
@@ -126,8 +126,8 @@ cleanup
 trap - EXIT INT TERM
 
 echo "==> Packaging distribution artifact..."
-mkdir -p ../releases
-env XZ_OPT="-9e -T0" tar -cJf "../releases/${ARTIFACT_NAME}" -C "${ROOTFS_DIR}" .
+mkdir -p ../../releases
+env XZ_OPT="-9e -T0" tar -cJf "../../releases/${ARTIFACT_NAME}" -C "${ROOTFS_DIR}" .
 
-echo "==> Build successful: $(cd ../releases && pwd)/${ARTIFACT_NAME}"
-ls -lh "../releases/${ARTIFACT_NAME}"
+echo "==> Build successful: $(cd ../../releases && pwd)/${ARTIFACT_NAME}"
+ls -lh "../../releases/${ARTIFACT_NAME}"
