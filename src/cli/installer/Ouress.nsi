@@ -126,6 +126,7 @@ Section "Install"
   SetRegView 64
   Call CloseRunningInstance
   SetOutPath "$INSTDIR"
+  Delete "$INSTDIR\ouress-v*.ress"
   File "..\..\..\bin\${APP_EXE}"
   File "..\..\..\LICENSE"
   File "..\..\..\NOTICE"
