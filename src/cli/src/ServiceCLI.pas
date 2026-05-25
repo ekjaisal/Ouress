@@ -66,8 +66,8 @@ uses
 
 class procedure TServiceCLI.PrintHeader;
 begin
-  Writeln(APP_NAME, ' v', APP_VERSION, ' · ', APP_URL);
-  Writeln('Copyright © 2026 ', DEV_AUTHOR, ' · BSD 3-Clause License');
+  Writeln(APP_NAME, ' ', APP_VERSION, ' · ', APP_URL);
+  Writeln('Copyright © 2026 ', DEV_AUTHOR, ' · BSD-3-Clause');
   Writeln('See the installation directory for full license text and third-party notices.');
   Writeln('----------------------------------------------------------------------------------');
 end;
