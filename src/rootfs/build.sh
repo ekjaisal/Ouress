@@ -40,12 +40,10 @@ if [ "$EUID" -ne 0 ]; then
     echo "Error: This script must be run as root (use sudo)."
     exit 1
 fi
-
 if ! command -v debootstrap >/dev/null 2>&1; then
     echo "Error: debootstrap is required but not installed."
     exit 1
 fi
-
 if ! command -v xz >/dev/null 2>&1; then
     echo "Error: xz-utils is required but not installed."
     exit 1
@@ -76,7 +74,7 @@ fi
 echo "==> Resolving Ouress documentation..."
 mkdir -p "${ROOTFS_DIR}/usr/share/doc/ouress"
 sed '1s/^\xEF\xBB\xBF//' ../../LICENSE > "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
-echo -e "\n\nThird-Party Notices\n___________________\n" >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
+echo -e "\n\n----------------------------------------------------------------------------------\n" >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
 sed '1s/^\xEF\xBB\xBF//' ../../NOTICE >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
 
 echo "==> Applying release metadata..."
