@@ -34,7 +34,7 @@ unit ServiceWSL;
 interface
 
 uses
-  Classes, SysUtils, Process;
+  Classes;
 
 type
   TWSLStatus = (wsUnknown, wsStopped, wsRunning);
@@ -49,20 +49,23 @@ type
 
   TServiceWSL = class
   private
-    class function RunProcess(const AExe: String; const AArgs: array of String; out AOutput: String; ATimeoutMS: Integer = 0): Boolean;
     class function FindWSLExe: String;
-    class function StripControlChars(const S: String): String;
     class function IsValidRessFile(const APath: String): Boolean;
+    class function RunProcess(const AExe: String; const AArgs: array of String; out AOutput: String; ATimeoutMS: Integer = 0): Boolean;
+    class function StripControlChars(const S: String): String;
   public
+    class function EnvironmentExists(const AName: String): Boolean;
+    class function ExportEnvironment(const AName, ADestPath: String; ACompressionLevel: Integer; out AErrorMsg: String): Boolean;
+    class function ImportEnvironment(const AName, AInstallPath, ARootFSPath: String; out AErrorMsg: String): Boolean;
     class function IsWSL2Available(out AErrorMsg: String): Boolean;
     class function ListEnvironments: TWSLEnvironmentArray;
-    class function EnvironmentExists(const AName: String): Boolean;
-    class function ImportEnvironment(const AName, AInstallPath, ARootFSPath: String; out AErrorMsg: String): Boolean;
-    class function ExportEnvironment(const AName, ADestPath: String; ACompressionLevel: Integer; out AErrorMsg: String): Boolean;
     class function UnregisterEnvironment(const AName: String; out AErrorMsg: String): Boolean;
   end;
 
 implementation
+
+uses
+  Process, SysUtils;
 
 class function TServiceWSL.StripControlChars(const S: String): String;
 var
@@ -102,14 +105,12 @@ var
   Magic: array[0..5] of Byte;
 begin
   Result := False;
-
   Magic[0] := 0;
   Magic[1] := 0;
   Magic[2] := 0;
   Magic[3] := 0;
   Magic[4] := 0;
   Magic[5] := 0;
-
   try
     FS := TFileStream.Create(APath, fmOpenRead or fmShareDenyWrite);
     try
@@ -149,7 +150,6 @@ begin
   WS := '';
   Buf[0] := 0;
   FillChar(Buf, SizeOf(Buf), 0);
-
   MS := TMemoryStream.Create;
   try
     Proc := TProcess.Create(nil);
@@ -157,12 +157,9 @@ begin
       Proc.Executable := AExe;
       for I := 0 to High(AArgs) do
         Proc.Parameters.Add(AArgs[I]);
-
       Proc.Options := [poUsePipes, poNoConsole, poStderrToOutPut];
       Proc.Execute;
-
       TimeoutCounter := 0;
-
       while True do
       begin
         if Proc.Output.NumBytesAvailable > 0 then
@@ -195,18 +192,15 @@ begin
           end;
         end;
       end;
-
       while Proc.Output.NumBytesAvailable > 0 do
       begin
         BytesRead := Proc.Output.Read(Buf, SizeOf(Buf));
         if BytesRead > 0 then
           MS.Write(Buf, BytesRead);
       end;
-
       if MS.Size > 0 then
       begin
         P := PByte(MS.Memory);
-
         if (MS.Size >= 2) and (P[0] = $FF) and (P[1] = $FE) then
         begin
           SetLength(WS, (MS.Size div 2) - 1);
@@ -220,7 +214,6 @@ begin
           Move(P[0], AOutput[1], MS.Size);
         end;
       end;
-
       Result := Proc.ExitCode = 0;
     finally
       Proc.Free;
@@ -237,29 +230,23 @@ var
 begin
   AErrorMsg := '';
   WslExe := FindWSLExe;
-
   if not FileExists(WslExe) then
   begin
     AErrorMsg := 'The wsl.exe executable was not found. WSL is not installed.';
     Result := False;
     Exit;
   end;
-
   Result := RunProcess(WslExe, ['--status'], Output, 15000);
-
   if Result and ((Pos('Error code:', Output) > 0) or
     (Pos('Wsl/Service', Output) > 0)) then
     Result := False;
-
   if not Result then
   begin
     AErrorMsg := StripControlChars(Output);
     Result := RunProcess(WslExe, ['--list'], Output, 15000);
-
     if Result and ((Pos('Error code:', Output) > 0) or
       (Pos('Wsl/Service', Output) > 0)) then
       Result := False;
-
     if not Result then
     begin
       if AErrorMsg = '' then
@@ -287,10 +274,8 @@ begin
   Result := nil;
   SetLength(Result, 0);
   Count := 0;
-
   if not RunProcess(FindWSLExe, ['--list', '--verbose'], Output, 15000) then
     Exit;
-
   Lines := TStringList.Create;
   try
     Parts := TStringList.Create;
@@ -299,28 +284,21 @@ begin
       for I := 0 to Lines.Count - 1 do
       begin
         Line := StripControlChars(Lines[I]);
-
         if (Line = '') or (Pos('NAME', UpperCase(Line)) > 0) then
           Continue;
-
         if (Length(Line) > 0) and (Line[1] = '*') then
           Delete(Line, 1, 1);
         Line := TrimLeft(Line);
-
         Parts.Clear;
         Parts.Delimiter := ' ';
         Parts.DelimitedText := Line;
-
         while Parts.IndexOf('') >= 0 do
           Parts.Delete(Parts.IndexOf(''));
-
         if Parts.Count < 1 then
           Continue;
-
         Env.Name := Parts[0];
         Env.Status := wsUnknown;
         Env.Version := 2;
-
         if Parts.Count >= 2 then
         begin
           if SameText(Parts[1], 'Running') then
@@ -328,10 +306,8 @@ begin
           else if SameText(Parts[1], 'Stopped') then
             Env.Status := wsStopped;
         end;
-
         if Parts.Count >= 3 then
           Env.Version := StrToIntDef(Parts[2], 2);
-
         SetLength(Result, Count + 1);
         Result[Count] := Env;
         Inc(Count);
@@ -365,14 +341,12 @@ var
   Output: String;
 begin
   AErrorMsg := '';
-
   if not FileExists(ARootFSPath) then
   begin
     AErrorMsg := 'Base image not found: ' + ARootFSPath;
     Result := False;
     Exit;
   end;
-
   if not IsValidRessFile(ARootFSPath) then
   begin
     AErrorMsg := 'Invalid archive format. The file is corrupt or ' +
@@ -380,14 +354,11 @@ begin
     Result := False;
     Exit;
   end;
-
   if not DirectoryExists(AInstallPath) then
     ForceDirectories(AInstallPath);
-
   Result := RunProcess(FindWSLExe,
     ['--import', AName, AInstallPath, ARootFSPath, '--version', '2'],
     Output, 0);
-
   if not Result then
     AErrorMsg := 'Import failed: ' + StripControlChars(Output);
 end;
@@ -402,51 +373,39 @@ var
 begin
   AErrorMsg := '';
   TempTarPath := ADestPath + '.tmp.tar';
-
   RunProcess(FindWSLExe, ['--terminate', AName], Output, 30000);
   Sleep(500);
-
   if FileExists(TempTarPath) then
     SysUtils.DeleteFile(TempTarPath);
   if FileExists(TempTarPath + '.xz') then
     SysUtils.DeleteFile(TempTarPath + '.xz');
-
   Result := RunProcess(FindWSLExe,
     ['--export', AName, TempTarPath], Output, 0);
-
   if not Result then
   begin
     AErrorMsg := 'Export failed: ' + StripControlChars(Output);
     Exit;
   end;
-
   Result := RunProcess(FindWSLExe,
     ['-d', AName, '-e', 'wslpath', '-a', TempTarPath], WSLPath, 15000);
-
   if not Result then
   begin
     AErrorMsg := 'Path resolution failed: ' + StripControlChars(WSLPath);
     SysUtils.DeleteFile(TempTarPath);
     Exit;
   end;
-
   WSLPath := Trim(StripControlChars(WSLPath));
-
   Result := RunProcess(FindWSLExe,
     ['-d', AName, '-e', 'xz', '-z', '-' + IntToStr(ACompressionLevel), '-T0', WSLPath], Output, 0);
-
   if not Result then
   begin
     AErrorMsg := 'Compression failed: ' + StripControlChars(Output);
     SysUtils.DeleteFile(TempTarPath);
     Exit;
   end;
-
   RunProcess(FindWSLExe, ['--terminate', AName], Output, 30000);
-
   if FileExists(ADestPath) then
     SysUtils.DeleteFile(ADestPath);
-
   if FileExists(TempTarPath + '.xz') then
   begin
     RenameRetries := 0;
@@ -460,7 +419,6 @@ begin
         Inc(RenameRetries);
       end;
     end;
-
     if not Result then
     begin
       SysUtils.DeleteFile(TempTarPath + '.xz');

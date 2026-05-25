@@ -40,7 +40,6 @@ const
   APP_URL        = 'https://ouress.jaisal.in';
   APP_REPOSITORY = 'https://github.com/ekjaisal/Ouress';
   DEV_URL        = 'https://jaisal.in';
-
   EXTENSION      = '.ress';
   FILTER         = 'Ouress Snapshot (*.ress)|*.ress|All Files (*.*)|*.*';
 

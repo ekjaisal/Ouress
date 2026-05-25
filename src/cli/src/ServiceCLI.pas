@@ -34,32 +34,35 @@ unit ServiceCLI;
 interface
 
 uses
-  Classes, SysUtils, ServiceWSL, AppIdentity, Windows, CommDlg;
+  ServiceWSL;
 
 type
   TStringArray = array of String;
 
   TServiceCLI = class
   private
-    class procedure PrintHeader;
-    class procedure PrintDiagnostic(const AErrorMsg: String);
-    class procedure EnsureWSLAvailable;
-    class procedure ListInstances(out AEnvs: TWSLEnvironmentArray);
-    class function GetBaseImages: TStringArray;
-    class procedure ListBaseImagesDisplay(const AImages: TStringArray);
     class function CleanInput(const AInput: String): String;
+    class function GetBaseImages: TStringArray;
     class function IsValidDistroName(const AName: String): Boolean;
     class function PromptForFile(AIsSave: Boolean; const ATitle: String): String;
-    class procedure ProcessRegistration(const BaseImages: TStringArray);
-    class procedure ProcessImport;
-    class procedure ProcessExport(const Envs: TWSLEnvironmentArray);
-    class procedure ProcessUnregister(const Envs: TWSLEnvironmentArray);
+    class procedure EnsureWSLAvailable;
     class procedure HandleMenu;
+    class procedure ListBaseImagesDisplay(const AImages: TStringArray);
+    class procedure ListInstances(out AEnvs: TWSLEnvironmentArray);
+    class procedure PrintDiagnostic(const AErrorMsg: String);
+    class procedure PrintHeader;
+    class procedure ProcessExport(const Envs: TWSLEnvironmentArray);
+    class procedure ProcessImport;
+    class procedure ProcessRegistration(const BaseImages: TStringArray);
+    class procedure ProcessUnregister(const Envs: TWSLEnvironmentArray);
   public
     class procedure Execute;
   end;
 
 implementation
+
+uses
+  AppIdentity, Classes, CommDlg, SysUtils, Windows;
 
 class procedure TServiceCLI.PrintHeader;
 begin
@@ -74,10 +77,8 @@ var
   UpperErr: String;
 begin
   UpperErr := UpperCase(AErrorMsg);
-
   Writeln('Diagnostic Information:');
   Writeln(AErrorMsg);
-
   if Pos('HCS_E_SERVICE_NOT_AVAILABLE', UpperErr) > 0 then
   begin
     Writeln;
@@ -131,17 +132,14 @@ var
   I: Integer;
 begin
   AEnvs := TServiceWSL.ListEnvironments;
-
   Writeln;
   Writeln('Registered Environments');
   Writeln('----------------------------------------------------------------------------------');
-
   if Length(AEnvs) = 0 then
   begin
     Writeln('No environments found.');
     Exit;
   end;
-
   for I := 0 to High(AEnvs) do
   begin
     Writeln(Format(' [%d] %s', [I + 1, AEnvs[I].Name]));
@@ -157,7 +155,6 @@ begin
   Result := nil;
   Count := 0;
   ExeDir := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)));
-
   if FindFirst(ExeDir + 'ouress-*' + EXTENSION, faAnyFile, SearchRec) = 0 then
   try
     repeat
@@ -180,7 +177,6 @@ begin
   Writeln;
   Writeln('Available Base Images');
   Writeln('----------------------------------------------------------------------------------');
-
   if Length(AImages) = 0 then
   begin
     Writeln('No base images found. Place a valid image file (' + EXTENSION + ') in the folder.');
@@ -231,7 +227,6 @@ begin
   Result := '';
   OldCtx := 0;
   SetThreadDpiCtx := nil;
-
   User32Module := LoadLibrary('user32.dll');
   if User32Module <> 0 then
   begin
@@ -239,15 +234,11 @@ begin
     if Assigned(SetThreadDpiCtx) then
       OldCtx := SetThreadDpiCtx(THandle(-4));
   end;
-
   OFN.lStructSize := 0;
   SzFile[0] := #0;
-
   FillChar(OFN, SizeOf(TOpenFileNameW), 0);
   FillChar(SzFile, SizeOf(SzFile), 0);
-
   FilterStr := 'Ouress Snapshot (*.ress)'#0'*.ress'#0'All Files (*.*)'#0'*.*'#0#0;
-
   OFN.lStructSize := SizeOf(TOpenFileNameW);
   OFN.hwndOwner := GetConsoleWindow();
   OFN.lpstrFilter := PWideChar(FilterStr);
@@ -255,7 +246,6 @@ begin
   OFN.nMaxFile := MAX_PATH;
   OFN.lpstrTitle := PWideChar(WideString(ATitle));
   OFN.lpstrDefExt := PWideChar(WideString('ress'));
-
   if AIsSave then
   begin
     OFN.Flags := OFN_EXPLORER or OFN_PATHMUSTEXIST or OFN_OVERWRITEPROMPT;
@@ -268,10 +258,8 @@ begin
     if GetOpenFileNameW(@OFN) then
       Result := String(WideString(SzFile));
   end;
-
   if (User32Module <> 0) and Assigned(SetThreadDpiCtx) and (OldCtx <> 0) then
     SetThreadDpiCtx(OldCtx);
-
   if User32Module <> 0 then
     FreeLibrary(User32Module);
 end;
@@ -288,12 +276,10 @@ begin
     Writeln;
     Exit;
   end;
-
   Write('Enter a name for the new environment: ');
   Readln(TargetName);
   TargetName := CleanInput(TargetName);
   if TargetName = '' then Exit;
-
   if not IsValidDistroName(TargetName) then
   begin
     Writeln;
@@ -303,7 +289,6 @@ begin
     Writeln;
     Exit;
   end;
-
   if Length(BaseImages) = 1 then
   begin
     ImageIndex := 0;
@@ -323,10 +308,8 @@ begin
     end;
     ImageIndex := ChoiceInt - 1;
   end;
-
   RootFS := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0))) + BaseImages[ImageIndex];
   DestPath := IncludeTrailingPathDelimiter(SysUtils.GetEnvironmentVariable('LOCALAPPDATA')) + APP_NAME + '\' + TargetName;
-
   Writeln;
   Writeln('Registering environment... please wait.');
   if TServiceWSL.ImportEnvironment(TargetName, DestPath, RootFS, ErrMsg) then
@@ -353,7 +336,6 @@ begin
   Readln(TargetName);
   TargetName := CleanInput(TargetName);
   if TargetName = '' then Exit;
-
   if not IsValidDistroName(TargetName) then
   begin
     Writeln;
@@ -363,13 +345,10 @@ begin
     Writeln;
     Exit;
   end;
-
   Writeln('Please select the .ress file from the dialog window...');
   RootFS := PromptForFile(False, 'Select Ouress Snapshot to Import');
   if RootFS = '' then Exit;
-
   DestPath := IncludeTrailingPathDelimiter(SysUtils.GetEnvironmentVariable('LOCALAPPDATA')) + APP_NAME + '\' + TargetName;
-
   Writeln;
   Writeln('Selected File: ', RootFS);
   Writeln;
@@ -384,7 +363,6 @@ begin
   Readln(Choice);
   Choice := LowerCase(CleanInput(Choice));
   if (Choice <> 'y') and (Choice <> 'yes') then Exit;
-
   Writeln;
   Writeln('Importing and registering environment...');
   if TServiceWSL.ImportEnvironment(TargetName, DestPath, RootFS, ErrMsg) then
@@ -415,7 +393,6 @@ begin
     Writeln;
     Exit;
   end;
-
   Write('Select environment to export by number (1 to ', Length(Envs), '): ');
   Readln(Choice);
   Choice := CleanInput(Choice);
@@ -428,7 +405,6 @@ begin
     Exit;
   end;
   TargetName := Envs[ChoiceInt - 1].Name;
-
   Writeln;
   Writeln('Compression Level');
   Writeln('----------------------------------------------------------------------------------');
@@ -447,7 +423,6 @@ begin
     Writeln;
     Exit;
   end;
-
   case ChoiceInt of
     1: CompLevel := 0;
     2: CompLevel := 6;
@@ -455,12 +430,10 @@ begin
   else
     CompLevel := 6;
   end;
-
   Writeln;
   Writeln('Please select the destination from the dialog window...');
   DestPath := PromptForFile(True, 'Save Ouress Snapshot As');
   if DestPath = '' then Exit;
-
   Writeln;
   Writeln('Exporting data... please wait (this might take several minutes).');
   if TServiceWSL.ExportEnvironment(TargetName, DestPath, CompLevel, ErrMsg) then
@@ -494,20 +467,16 @@ begin
     Writeln;
     Exit;
   end;
-
   Write('Specify the environments to unregister by number (e.g. 1, 2): ');
   Readln(Choice);
   Choice := CleanInput(Choice);
   if Choice = '' then Exit;
-
   Targets := nil;
-
   DelParts := TStringList.Create;
   try
     DelParts.Delimiter := ',';
     DelParts.StrictDelimiter := True;
     DelParts.DelimitedText := Choice;
-
     for I := 0 to DelParts.Count - 1 do
     begin
       ChoiceInt := StrToIntDef(Trim(DelParts[I]), 0);
@@ -520,7 +489,6 @@ begin
   finally
     DelParts.Free;
   end;
-
   if Length(Targets) = 0 then
   begin
     Writeln;
@@ -528,7 +496,6 @@ begin
     Writeln;
     Exit;
   end;
-
   TargetNamesStr := '';
   for I := 0 to High(Targets) do
   begin
@@ -539,7 +506,6 @@ begin
     else
       TargetNamesStr := TargetNamesStr + ', "' + Targets[I] + '"';
   end;
-
   Writeln;
   Write('Proceed to unregister ', TargetNamesStr, '? (y/n): ');
   Readln(Choice);
@@ -574,7 +540,6 @@ begin
     BaseImages := GetBaseImages;
     ListBaseImagesDisplay(BaseImages);
     Writeln;
-
     Writeln('Menu');
     Writeln('----------------------------------------------------------------------------------');
     Writeln(' [1] Register New Environment');
@@ -586,7 +551,6 @@ begin
     Write('Select an option [0-4]: ');
     Readln(Choice);
     Choice := CleanInput(Choice);
-
     case Choice of
       '1': ProcessRegistration(BaseImages);
       '2': ProcessImport;
