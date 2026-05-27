@@ -127,67 +127,6 @@ begin
   end;
 end;
 
-class procedure TServiceCLI.ListInstances(out AEnvs: TWSLEnvironmentArray);
-var
-  I: Integer;
-begin
-  AEnvs := TServiceWSL.ListEnvironments;
-  Writeln;
-  Writeln('Registered Environments');
-  Writeln('----------------------------------------------------------------------------------');
-  if Length(AEnvs) = 0 then
-  begin
-    Writeln('No environments found.');
-    Exit;
-  end;
-  for I := 0 to High(AEnvs) do
-  begin
-    Writeln(Format(' [%d] %s', [I + 1, AEnvs[I].Name]));
-  end;
-end;
-
-class function TServiceCLI.GetBaseImages: TStringArray;
-var
-  SearchRec: TSearchRec;
-  ExeDir: String;
-  Count: Integer;
-begin
-  Result := nil;
-  Count := 0;
-  ExeDir := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)));
-  if FindFirst(ExeDir + 'ouress-*' + EXTENSION, faAnyFile, SearchRec) = 0 then
-  try
-    repeat
-      if (SearchRec.Attr and faDirectory) = 0 then
-      begin
-        SetLength(Result, Count + 1);
-        Result[Count] := SearchRec.Name;
-        Inc(Count);
-      end;
-    until FindNext(SearchRec) <> 0;
-  finally
-    SysUtils.FindClose(SearchRec);
-  end;
-end;
-
-class procedure TServiceCLI.ListBaseImagesDisplay(const AImages: TStringArray);
-var
-  I: Integer;
-begin
-  Writeln;
-  Writeln('Available Base Images');
-  Writeln('----------------------------------------------------------------------------------');
-  if Length(AImages) = 0 then
-  begin
-    Writeln('No base images found. Place a valid image file (' + EXTENSION + ') in the folder.');
-  end
-  else
-  begin
-    for I := 0 to High(AImages) do
-      Writeln(Format(' [%d] %s', [I + 1, AImages[I]]));
-  end;
-end;
-
 class function TServiceCLI.CleanInput(const AInput: String): String;
 begin
   Result := Trim(AInput);
@@ -262,6 +201,67 @@ begin
     SetThreadDpiCtx(OldCtx);
   if User32Module <> 0 then
     FreeLibrary(User32Module);
+end;
+
+class function TServiceCLI.GetBaseImages: TStringArray;
+var
+  SearchRec: TSearchRec;
+  ExeDir: String;
+  Count: Integer;
+begin
+  Result := nil;
+  Count := 0;
+  ExeDir := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)));
+  if FindFirst(ExeDir + 'ouress-*' + EXTENSION, faAnyFile, SearchRec) = 0 then
+  try
+    repeat
+      if (SearchRec.Attr and faDirectory) = 0 then
+      begin
+        SetLength(Result, Count + 1);
+        Result[Count] := SearchRec.Name;
+        Inc(Count);
+      end;
+    until FindNext(SearchRec) <> 0;
+  finally
+    SysUtils.FindClose(SearchRec);
+  end;
+end;
+
+class procedure TServiceCLI.ListBaseImagesDisplay(const AImages: TStringArray);
+var
+  I: Integer;
+begin
+  Writeln;
+  Writeln('Available Base Images');
+  Writeln('----------------------------------------------------------------------------------');
+  if Length(AImages) = 0 then
+  begin
+    Writeln('No base images found. Place a valid image file (' + EXTENSION + ') in the folder.');
+  end
+  else
+  begin
+    for I := 0 to High(AImages) do
+      Writeln(Format(' [%d] %s', [I + 1, AImages[I]]));
+  end;
+end;
+
+class procedure TServiceCLI.ListInstances(out AEnvs: TWSLEnvironmentArray);
+var
+  I: Integer;
+begin
+  AEnvs := TServiceWSL.ListEnvironments;
+  Writeln;
+  Writeln('Registered Environments');
+  Writeln('----------------------------------------------------------------------------------');
+  if Length(AEnvs) = 0 then
+  begin
+    Writeln('No environments found.');
+    Exit;
+  end;
+  for I := 0 to High(AEnvs) do
+  begin
+    Writeln(Format(' [%d] %s', [I + 1, AEnvs[I].Name]));
+  end;
 end;
 
 class procedure TServiceCLI.ProcessRegistration(const BaseImages: TStringArray);
