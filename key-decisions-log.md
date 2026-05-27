@@ -8,7 +8,7 @@ This document serves as the ledger recording the key decisions taken concerning 
 | ----- | -------------------------------------------- | ------------------------------------------------------------ |
 | 1     | *Debian* GNU/Linux as the base   | Battle-tested stable and reliable operating system base for long-term durability. |
 | 2     | Debian snapshot repository                   | Locks the `apt` package ecosystem to a specific timestamp via `snapshot.debian.org` to guarantee bit-for-bit reproducibility across builds. |
-| 3     | `.ress` artifact extension                   | Identifies the custom compressed `tar` format, distinguishing it from generic archives while maintaining cross-platform structural consistency. |
+| 3     | `.ress` artefact extension                  | Identifies the custom compressed `tar` format, distinguishing it from generic archives while maintaining cross-platform structural consistency. |
 | 4     | `fish` as interactive shell                  | Provides syntax highlighting and autosuggestions by default. Configuration is isolated in `/etc/fish/conf.d/` to survive upgrades. |
 | 5     | `bash` retained                              | Included as a reliable fallback for scripting and automation. |
 | 6     | Unprivileged execution (Passwordless `sudo`) | Executes as the `ouress` user to provide a cognitive safety net against accidental system destruction, while passwordless `sudo` eliminates friction for deliberate administrative actions. |
@@ -27,11 +27,11 @@ This document serves as the ledger recording the key decisions taken concerning 
 | 19    | `w3m` and `html2text`                        | `w3m` converts web pages while preserving spatial layout; `html2text` generates semantic Markdown. |
 | 20    | `batcat` included                            | Provides syntax highlighting and pagination for reading raw structured data on the terminal. |
 | 21    | `moreutils` (`sponge`, `ts`)                 | `sponge` enables safe, in-place pipeline editing; `ts` allows timestamping of standard input lines. |
-| 22    | Static binary version pinning                | External binaries are hard-coded to specific release URLs to prevent upstream fragility and guarantee absolute reproducibility of the build artifact. |
-| 23    | SHA256 checksum verification                 | Cryptographically verifies all downloaded external binaries against hard-coded hashes to prevent supply-chain tampering and ensure artifact integrity. |
+| 22    | Static binary version pinning                | External binaries are hard-coded to specific release URLs to prevent upstream fragility and guarantee absolute reproducibility of the build artefact. |
+| 23    | SHA256 checksum verification                 | Cryptographically verifies all downloaded external binaries against hard-coded hashes to prevent supply-chain tampering and ensure artefact integrity. |
 | 24    | Automated SSL symlinking (APT Hook)          | A `DPkg::Post-Invoke` hook links required `libssl` base names to dynamically versioned libraries, maintaining HTTPS support without `-dev` packages across `apt upgrade` operations. |
 | 25    | Safe ELF binary stripping                    | Stripping is restricted to validated ELF files using `file` to remove dead weight while protecting shell wrapper scripts and hooks from corruption. |
-| 26    | Static `.a` libraries removed                | Pure build artifacts providing no runtime utility.           |
+| 26    | Static `.a` libraries removed                | Pure build artefacts providing no runtime utility.          |
 | 27    | Man pages and copyrights retained            | Required for offline manual access and open-source license compliance. |
 | 28    | Obscure `gconv` encodings removed            | Unnecessary encodings purged to reduce size, retaining only standard and major global encodings (UTF, ISO-8859, Windows codepages, KOI, CJK). |
 | 29    | `cron` daemon excluded                       | Ouress is an on-demand appliance, not a 24/7 server. Task scheduling should be delegated to the host OS. |
