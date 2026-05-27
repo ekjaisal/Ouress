@@ -108,13 +108,19 @@ The architectural essence of Ouress can thus be summarised as a research applian
 
 Ouress provides a zero-friction command-line utility for Windows, eliminating the need for manual WSL configuration or PowerShell scripting.
 
-1. Download the installer from the [Releases](https://github.com/ekjaisal/Ouress/releases/latest) page or from [https://ouress.jaisal.in](https://ouress.jaisal.in).
+1. Download the installer from any of the following sources:
+
+   * GitHub [Releases](https://github.com/ekjaisal/Ouress/releases/latest) page
+   * [https://sourceforge.net/projects/ouress](https://sourceforge.net/projects/ouress)
+   * [https://ouress.jaisal.in](https://ouress.jaisal.in)
 
 2. Run the installer to deploy the command-line utility alongside the base `.ress` image.
 
    **Note:** Windows SmartScreen may flag the installer as an unrecognised application. Provided the installer is sourced from the locations specified in step 1, bypass the prompt by clicking **More info** → **Run anyway**. For added assurance, [verify](#verification) the `SHA256SUMS`.
 
 3. Launch Ouress from the Start Menu.
+
+   **Note:** Ouress requires the Windows Subsystem for Linux (WSL2). If WSL is not already installed, open PowerShell as Administrator, run `wsl --install`, and restart the machine when prompted.
 
 4. Use the interactive command-line utility to manage the entire environment lifecycle:
 
