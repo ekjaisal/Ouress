@@ -278,7 +278,7 @@ sudo apt update && sudo apt install -y debootstrap xz-utils
 
 1. Clone or download the Ouress repository to the build machine.
 
-2. Navigate to the `rootfs` directory.
+2. Navigate to the `src/rootfs` directory.
 
 3. Execute the orchestrator script as root.
 
