@@ -1,8 +1,10 @@
-/rootfs/build/
+src/rootfs/build/
 /releases/
 /bin/
-/cli/lib/
-/cli/backup/
+src/cli/lib/
+src/cli/backup/
+src/cli/*.res
+src/cli/*.lps
 *.exe
 *.ress
 *.o
