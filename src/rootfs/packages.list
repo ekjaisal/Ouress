@@ -31,7 +31,7 @@
 # Supported FILE_TYPEs: tar.gz, tgz, tar.xz, zip, raw
 # --------------------------------------------------------------------------------
 
-mlr    tar.gz  https://github.com/johnkerl/miller/releases/download/v6.17.0/miller-6.17.0-linux-amd64.tar.gz            5a3588754d42cea7f46c5fe38ce1bf50c6043e8eefe3656acf5bbd2fd86c1ea4
+mlr    tar.gz  https://github.com/johnkerl/miller/releases/download/v6.18.1/miller-6.18.1-linux-amd64.tar.gz            5a1b4322dae60857e8de6ac4acd5a2ce97b174667ee5f4de059cf05ced4b56ea
 xsv    tar.gz  https://github.com/BurntSushi/xsv/releases/download/0.13.0/xsv-0.13.0-x86_64-unknown-linux-musl.tar.gz   d36b1be0f008d6597c2437e764fbe720eb7557f8980e0b03ca709e1020b5c52b
 gron   tgz     https://github.com/tomnomnom/gron/releases/download/v0.7.1/gron-linux-amd64-0.7.1.tgz                    ca0335826b02b044fa05d7e951521e45c6ced1c381a73ed5803450088e18bf22
 yq     raw     https://github.com/mikefarah/yq/releases/download/v4.52.5/yq_linux_amd64                                 75d893a0d5940d1019cb7cdc60001d9e876623852c31cfc6267047bc31149fa9
