@@ -102,7 +102,7 @@ FunctionEnd
 Function LicenseShow
   FindWindow $0 "#32770" "" $HWNDPARENT
   GetDlgItem $0 $0 1000
-  CreateFont $1 "Consolas" 8 700
+  CreateFont $1 "Consolas" 7 400
   SendMessage $0 0x0030 $1 1
 FunctionEnd
 
