@@ -1,24 +1,21 @@
 #!/bin/bash
 
-# BSD 3-Clause License
-# ____________________
-# 
 # Copyright © 2026, Jaisal E. K.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
-# 
-# 2. Redistributions in binary form must reproduce the above copyright notice,
-#    this list of conditions and the following disclaimer in the documentation
-#    and/or other materials provided with the distribution.
-# 
-# 3. Neither the name of the copyright holder nor the names of its
-#    contributors may be used to endorse or promote products derived from
-#    this software without specific prior written permission.
-# 
+#
+#   1. Redistributions of source code must retain the above copyright notice,
+#      this list of conditions and the following disclaimer.
+#
+#   2. Redistributions in binary form must reproduce the above copyright notice,
+#      this list of conditions and the following disclaimer in the documentation
+#      and/or other materials provided with the distribution.
+#
+#   3. Neither the name of the copyright holder nor the names of its
+#      contributors may be used to endorse or promote products derived from
+#      this software without specific prior written permission.
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -62,7 +59,6 @@ locale-gen
 update-locale LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 echo "==> Retrieving external binaries..."
-
 if [ -f /tmp/packages.list ]; then
     while IFS=$' \t' read -r bin_name file_type url expected_hash || [ -n "$bin_name" ]; do
         [[ -z "$bin_name" || "$bin_name" == \#* ]] && continue
@@ -72,14 +68,11 @@ if [ -f /tmp/packages.list ]; then
         [ "$file_type" = "raw" ] && dest="/usr/local/bin/${bin_name}"
         
         curl -fsSL "$url" -o "$dest" || true
-        
         if [ ! -f "$dest" ]; then
             echo "Error: Download failed or returned 404 for $url" >&2
             exit 1
         fi
-        
         actual_hash=$(sha256sum "$dest" | awk '{print $1}')
-        
         if [ "$actual_hash" != "$expected_hash" ]; then
             echo "Error: SHA256 mismatch for $bin_name." >&2
             echo "Expected: $expected_hash" >&2
@@ -328,7 +321,6 @@ end
 if status is-interactive
     __ouress_startup_cd
 end
-
 EOF
 
 chsh -s /usr/bin/fish root

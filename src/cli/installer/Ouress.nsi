@@ -1,22 +1,19 @@
-﻿; BSD 3-Clause License
-; ____________________
-; 
-; Copyright © 2026, Jaisal E. K.
-; 
+﻿; Copyright © 2026, Jaisal E. K.
+;
 ; Redistribution and use in source and binary forms, with or without
 ; modification, are permitted provided that the following conditions are met:
-; 
-; 1. Redistributions of source code must retain the above copyright notice, this
-;    list of conditions and the following disclaimer.
-; 
-; 2. Redistributions in binary form must reproduce the above copyright notice,
-;    this list of conditions and the following disclaimer in the documentation
-;    and/or other materials provided with the distribution.
-; 
-; 3. Neither the name of the copyright holder nor the names of its
-;    contributors may be used to endorse or promote products derived from
-;    this software without specific prior written permission.
-; 
+;
+;   1. Redistributions of source code must retain the above copyright notice,
+;      this list of conditions and the following disclaimer.
+;
+;   2. Redistributions in binary form must reproduce the above copyright notice,
+;      this list of conditions and the following disclaimer in the documentation
+;      and/or other materials provided with the distribution.
+;
+;   3. Neither the name of the copyright holder nor the names of its
+;      contributors may be used to endorse or promote products derived from
+;      this software without specific prior written permission.
+;
 ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -39,26 +36,21 @@ ManifestSupportedOS Win10
 
 !define APP_NAME "Ouress"
 !define APP_EXE "Ouress.exe"
-
-!getdllversion "..\..\bin\${APP_EXE}" ext_ver_
+!getdllversion "..\..\..\bin\${APP_EXE}" ext_ver_
 !define APP_VERSION "${ext_ver_1}.${ext_ver_2}.${ext_ver_3}"
 !define APP_BUILD "${ext_ver_4}"
-
 !define APP_PUBLISHER "Jaisal E. K."
 !define APP_WEBSITE "https://ouress.jaisal.in"
 !define APP_COPYRIGHT_YEAR "2026"
 !define APP_COMMENT "An Opinionated Underlabouring Research Environment for the Social Sciences"
 !define APP_GUID "{A182689B-F2CA-4889-A271-B0B605038533}"
-
 Name "${APP_NAME}"
-!system 'cmd.exe /c if not exist "..\..\releases" mkdir "..\..\releases"'
-OutFile "..\..\releases\${APP_NAME}-v${APP_VERSION}-x64-Setup.exe"
+!system 'cmd.exe /c if not exist "..\..\..\releases" mkdir "..\..\..\releases"'
+OutFile "..\..\..\releases\${APP_NAME}-v${APP_VERSION}-x64-Setup.exe"
 InstallDir "$LOCALAPPDATA\Programs\${APP_NAME}"
 RequestExecutionLevel user
 SetCompressor lzma
-
 SetFont "Arial" 9
-
 VIProductVersion "${APP_VERSION}.${APP_BUILD}"
 VIAddVersionKey /LANG=2057 "ProductName" "${APP_NAME}"
 VIAddVersionKey /LANG=2057 "Comments" "${APP_COMMENT}"
@@ -67,40 +59,28 @@ VIAddVersionKey /LANG=2057 "LegalCopyright" "© ${APP_COPYRIGHT_YEAR} ${APP_PUBL
 VIAddVersionKey /LANG=2057 "FileDescription" "${APP_NAME} Setup"
 VIAddVersionKey /LANG=2057 "FileVersion" "${APP_VERSION}.${APP_BUILD}"
 VIAddVersionKey /LANG=2057 "ProductVersion" "${APP_VERSION}"
-
 BrandingText "${APP_PUBLISHER}"
-
 !define MUI_ICON "..\Ouress.ico"
 !define MUI_UNICON "..\Ouress.ico"
 !define MUI_ABORTWARNING
-
 !define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange-uninstall.bmp"
-
 !define MUI_WELCOMEPAGE_TEXT "Setup will guide you through the installation of ${APP_NAME}.$\r$\n$\r$\nClick Next to continue."
-
 !define MUI_FONT_NAME "Arial"
 !define MUI_FONT_SIZE "9"
-
 !insertmacro MUI_PAGE_WELCOME
-
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW LicenseShow
-!insertmacro MUI_PAGE_LICENSE "..\..\LICENSE"
-
+!insertmacro MUI_PAGE_LICENSE "..\..\..\LICENSE"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
-
 !define MUI_FINISHPAGE_RUN
 !define MUI_FINISHPAGE_RUN_FUNCTION LaunchApplication
 !insertmacro MUI_PAGE_FINISH
-
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
-
 !insertmacro MUI_LANGUAGE "English"
-
 LangString ^BackBtn ${LANG_ENGLISH} "&Back"
 LangString ^NextBtn ${LANG_ENGLISH} "&Next"
 
@@ -122,7 +102,7 @@ FunctionEnd
 Function LicenseShow
   FindWindow $0 "#32770" "" $HWNDPARENT
   GetDlgItem $0 $0 1000
-  CreateFont $1 "Consolas" 8 700
+  CreateFont $1 "Consolas" 7 400
   SendMessage $0 0x0030 $1 1
 FunctionEnd
 
@@ -144,24 +124,18 @@ FunctionEnd
 
 Section "Install"
   SetRegView 64
-
   Call CloseRunningInstance
-
   SetOutPath "$INSTDIR"
-  
-  File "..\..\bin\${APP_EXE}"
-  File "..\..\LICENSE"
-  File "..\..\NOTICE"
-
+  Delete "$INSTDIR\ouress-v*.ress"
+  File "..\..\..\bin\${APP_EXE}"
+  File "..\..\..\LICENSE"
+  File "..\..\..\NOTICE"
   SetOverwrite off
-  File "..\..\releases\ouress-v${APP_VERSION}.ress"
+  File "..\..\..\releases\ouress-v${APP_VERSION}.ress"
   SetOverwrite on
-
   WriteUninstaller "$INSTDIR\Uninstall.exe"
-
   SetShellVarContext current
   CreateShortcut "$SMPROGRAMS\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
-
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_GUID}" "DisplayName" "${APP_NAME}"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_GUID}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_GUID}" "QuietUninstallString" '"$INSTDIR\Uninstall.exe" /S'
@@ -173,7 +147,6 @@ Section "Install"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_GUID}" "URLUpdateInfo" "${APP_WEBSITE}"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_GUID}" "HelpLink" "${APP_WEBSITE}"
   WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_GUID}" "Comments" "${APP_COMMENT}"
-
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_GUID}" "EstimatedSize" "$0"
@@ -183,19 +156,15 @@ SectionEnd
 
 Section "Uninstall"
   SetRegView 64
-
   Call un.CloseRunningInstance
-
   Delete "$INSTDIR\${APP_EXE}"
   Delete "$INSTDIR\LICENSE"
   Delete "$INSTDIR\NOTICE"
   Delete "$INSTDIR\ouress-v${APP_VERSION}.ress"
   Delete "$INSTDIR\Uninstall.exe"
   RMDir "$INSTDIR"
-
   SetShellVarContext current
   Delete "$SMPROGRAMS\${APP_NAME}.lnk"
-
   DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_GUID}"
 SectionEnd
 

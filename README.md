@@ -25,15 +25,15 @@ While reproducible environments have existed for a long time, with Docker-like c
   * **“As is” Release Base:** Pipelines executing on an unmodified release base image.
   * **Scripted Extension:** Pipelines executing on a release base image where all system modifications (e.g. supplementary `apt` installations) are explicitly codified within the pipeline itself.
   * **Stateful Snapshot:** Pipelines executing from a distributed, fully configured custom `.ress` archive that captures the exact frozen state of the workbench.
-* **Lean and Just Enough:** Ouress will be a lean, yet stable, versatile, and sufficiently-equipped distribution artifact with [Just Enough Operating System](https://www.suse.com/topics/definition/jeos-just-enough-operating-system) (JeOS) required to run on WSL2 or Linux `chroot`. The [kernel](https://www.techtarget.com/searchdatacenter/definition/kernel)-less appliance will only package strictly required tools and aggressively remove heavyweight graphical frameworks, legacy hardware databases, and redundant translation scaffolding. Components such as the Python 3 core will be bundled strictly with `pip` and `venv` to support [PEP-668](https://peps.python.org/pep-0668) isolated environments, ensuring minimal data retention on the disk.
-* **Architectural Portability:** The primary distribution artifact (the `.ress` archive) will be a unified, structurally identical [root filesystem](https://www.linfo.org/root_filesystem.html). Whether deployed natively via `chroot` on a Linux system or launched through the Windows Subsystem for Linux (WSL2), the internal environment will execute identically without requiring platform-specific branching.
+* **Lean and Just Enough:** Ouress will be a lean, yet stable, versatile, and sufficiently-equipped distribution artefact with [Just Enough Operating System](https://www.suse.com/topics/definition/jeos-just-enough-operating-system) (JeOS) required to run on WSL2 or Linux `chroot`. The [kernel](https://www.techtarget.com/searchdatacenter/definition/kernel)-less appliance will only package strictly required tools and aggressively remove heavyweight graphical frameworks, legacy hardware databases, and redundant translation scaffolding. Components such as the Python 3 core will be bundled strictly with `pip` and `venv` to support [PEP-668](https://peps.python.org/pep-0668) isolated environments, ensuring minimal data retention on the disk.
+* **Architectural Portability:** The primary distribution artefact (the `.ress` archive) will be a unified, structurally identical [root filesystem](https://www.linfo.org/root_filesystem.html). Whether deployed natively via `chroot` on a Linux system or launched through the Windows Subsystem for Linux (WSL2), the internal environment will execute identically without requiring platform-specific branching.
 * **Reliability & Graceful Degradation:** Customisations, shell aliases, and convenience functions must never introduce critical points of failure. Every environmental enhancement should be designed to degrade gracefully, ensuring the underlying *Debian* core and POSIX utilities remain fully operational and resilient against unexpected usage patterns.
 * **Binary Durability:** Core utilities must survive routine `apt upgrade` operations with bloat-reduction and without succumbing to dependency conflicts. Defensive mechanisms, such as dynamic APT post-invoke hooks for SSL library symlinking, ensure that network-dependent binaries maintain continuous HTTPS connectivity even after development header packages are removed.
 * **Version Pinning:** Pre-compiled static binaries fetched outside the default package ecosystem must be strictly version-pinned to specific upstream releases and validated against hardcoded SHA256 checksums. This secures the build process against upstream fragility, link rot, and supply-chain tampering.
-* **Unified Lockstep Versioning Plan:** To eliminate ambiguity regarding pipeline compatibility, the management utility and the Linux root filesystem will be versioned as a single, indivisible artifact using [semantic versioning](https://semver.org) (`MAJOR.MINOR.PATCH`). This ensures exact matching between pipeline requirements and environment states:
+* **Unified Lockstep Versioning Plan:** To eliminate ambiguity regarding pipeline compatibility, the management utility and the Linux root filesystem will be versioned as a single, indivisible artefact using [semantic versioning](https://semver.org) (`MAJOR.MINOR.PATCH`). This ensures exact matching between pipeline requirements and environment states:
   - **The MAJOR Epoch (e.g. v1.0.0 to v2.0.0):** Indicates a foundational shift that may break backwards compatibility. This will be strictly triggered by upstream *Debian* stable generation upgrades (e.g. *Debian* 13 to 14), major interpreter shifts (e.g. Python 3.13 to 3.14), or the deprecation and removal of core tools. Pipelines developed on a previous major version may require modification to execute on a newer major version.
   - **The MINOR Workbench (e.g. v1.0.0 to v1.1.0):** Signifies a shift in the internal reproducibility state that remains functionally backwards-compatible. This will be triggered when updating the frozen *Debian* snapshot timestamp (to ingest upstream point releases and security patches), updating pinned external binaries, or adding new tools. While older pipelines will most likely execute deterministically without errors, strict bit-by-bit replication requires anchoring to the exact Minor version.
-  - **The Chassis PATCH (e.g. v1.0.0 to v1.0.1):** Denotes ergonomic updates to the management utility, installer, or documentation. The underlying *Debian* snapshot timestamp and curated binaries remain entirely frozen but the version number in the artifact will be bumped for synchronisation. Pipelines will be mostly compatible across all patch versions within the same minor release sequence.
+  - **The Chassis PATCH (e.g. v1.0.0 to v1.0.1):** Denotes ergonomic updates to the management utility, installer, or documentation. The underlying *Debian* snapshot timestamp and curated binaries remain entirely frozen but the version number in the artefact will be bumped for synchronisation. Pipelines will be mostly compatible across all patch versions within the same minor release sequence.
 
 ## Architecture
 
@@ -43,7 +43,8 @@ The Ouress-specific metadata resides under `/etc/ouress/`, keeping the upstream 
 
 The architectural essence of Ouress can thus be summarised as a research appliance composed of a root filesystem that shares the host’s kernel and is derived by reducing *Debian* to JeOS and preconfiguring it with a curated selection of packages. The foundational architectural choices, tool curation logic, and defensive mechanisms are recorded in the [key decisions log](key-decisions-log.md).
 
-**Note:** Ouress currently supports only the `amd64` (`x86_64`) architecture.
+> [!NOTE]
+> Ouress currently supports only the `amd64` (`x86_64`) architecture.
 
 ## The Curated Bundle
 
@@ -108,13 +109,21 @@ The architectural essence of Ouress can thus be summarised as a research applian
 
 Ouress provides a zero-friction command-line utility for Windows, eliminating the need for manual WSL configuration or PowerShell scripting.
 
-1. Download the installer from the [Releases](https://github.com/ekjaisal/Ouress/releases/latest) page or from [https://ouress.jaisal.in](https://ouress.jaisal.in).
+1. Download the installer from any of the following sources:
+
+   * GitHub [Releases](https://github.com/ekjaisal/Ouress/releases/latest) page
+   * [https://sourceforge.net/projects/ouress](https://sourceforge.net/projects/ouress)
+   * [https://ouress.jaisal.in](https://ouress.jaisal.in)
 
 2. Run the installer to deploy the command-line utility alongside the base `.ress` image.
 
-   **Note:** Windows SmartScreen may flag the installer as an unrecognised application. Provided the installer is sourced from the locations specified in step 1, bypass the prompt by clicking **More info** → **Run anyway**. For added assurance, [verify](#verification) the `SHA256SUMS`.
+> [!NOTE]
+> Windows SmartScreen may flag the installer as an unrecognised application. Provided the installer is sourced from the locations specified in step 1, bypass the prompt by clicking **More info** → **Run anyway**. For added assurance, [verify](#verification) the `SHA256SUMS`.
 
 3. Launch Ouress from the Start Menu.
+
+> [!NOTE]
+> Ouress requires the Windows Subsystem for Linux (WSL2). If WSL is not already installed, open PowerShell as Administrator, run `wsl --install`, and restart the machine when prompted.
 
 4. Use the interactive command-line utility to manage the entire environment lifecycle:
 
@@ -159,7 +168,8 @@ sudo umount ~/ouress-project/mnt
 sudo umount ~/ouress-project/etc/resolv.conf
 ```
 
-**Note:** See the accompanying [quick reference](quick-reference.md) file to familiarise with a few standard operational procedures.
+> [!NOTE]
+> See the accompanying [quick reference](quick-reference.md) file to familiarise with a few standard operational procedures.
 
 ## Environment Snapshots (.ress)
 
@@ -169,11 +179,13 @@ Use the **Ouress** management utility to handle snapshot operations securely.
 
 When exporting (`[3] Export Environment`), the utility will ask for the preferred compression level, launch a native file dialog and prompt for a destination and filename, and execute a pipeline that instructs the Linux subsystem to compress its own filesystem. The pipeline bypasses the Windows-Linux I/O bridge, eliminating the need for manual disk compaction or zeroing.
 
-**Note:** Exercise caution while attempting to export non-Ouress environments using the utility. Exporting with the utility works only if the environment has `xz-utils` (name can vary) installed. Incorrect usage may result in locks or errors in WSL.
+> [!NOTE]
+> Exercise caution while attempting to export non-Ouress environments using the utility. Exporting with the utility works only if the environment has `xz-utils` (name can vary) installed. Incorrect usage may result in locks or errors in WSL.
 
 When importing (`[2] Import Environment`), the utility will prompt for a destination name and launch a native file dialog to select any valid `.ress` snapshot. The environment will be instantly restored and registered with the operating system.
 
-**Important Security Note:** A `.ress` snapshot is a complete, executable Linux filesystem. By default, importing and launching a snapshot grants it the exact same privileges as the current Windows user account, including full read/write access to files via `/mnt/c/`. Treat a `.ress` file with the **exact degree of caution** as with an executable `.exe` file and import environments only from **trusted sources**.
+> [!IMPORTANT]
+> A `.ress` snapshot is a complete, executable Linux filesystem. By default, importing and launching a snapshot grants it the exact same privileges as the current Windows user account, including full read/write access to files via `/mnt/c/`. Treat a `.ress` file with the **exact degree of caution** as with an executable `.exe` file and import environments only from **trusted sources**.
 
 ### Importing on Linux
 
@@ -214,16 +226,18 @@ sudo umount ~/ouress-received/etc/resolv.conf
 sudo env XZ_OPT="-6 -T0" tar -cJf research-snapshot.ress -C ~/ouress-project . 
 ```
 
-**Note:** Change `-6` to `-0` for the fastest export but with larger file size or to `-9` or even `-9e` (extreme) for the slowest export with smallest file size.
+> [!TIP]
+> Change `-6` to `-0` for the fastest export but with larger file size or to `-9` or even `-9e` (extreme) for the slowest export with smallest file size.
 
 ## Verification
 
-A PGP signed `SHA256SUMS` file is included with the release artifacts for verifying integrity.
+A PGP-signed `SHA256SUMS` file is included with the release artefacts for integrity verification.
 
-**Fingerprint:** `C4A8 E4F9 1650 7DD9 49D4 5DF8 B4ED 8851 B020 2101`
-**Key Server:** [keys.openpgp.org](https://keys.openpgp.org)
+| Fingerprint                                         | Key Server                                   |
+| --------------------------------------------------- | -------------------------------------------- |
+| `C4A8 E4F9 1650 7DD9 49D4 5DF8 B4ED 8851 B020 2101` | [keys.openpgp.org](https://keys.openpgp.org) |
 
-## Building from Source (if required)
+## Building from Source
 
 The Ouress base image, i.e. the customised root filesystem, is readily distributed as `ouress-vx.x.x.ress` and the WSL command-line utility (along with the root filesystem) as `Ouress-vx.x.x-x64-Setup.exe`. If required, they can be rebuilt exactly (or with modifications) through the following steps:
 
@@ -264,7 +278,7 @@ sudo apt update && sudo apt install -y debootstrap xz-utils
 
 1. Clone or download the Ouress repository to the build machine.
 
-2. Navigate to the `rootfs` directory.
+2. Navigate to the `src/rootfs` directory.
 
 3. Execute the orchestrator script as root.
 
@@ -286,12 +300,12 @@ sudo apt update && sudo apt install -y debootstrap xz-utils
 3. Open the `Ouress.lpi` in the Lazarus IDE.
 4. Build using **Run** → **Build** or `Shift` + `F9`.
 
-### Build Notes
-
-* The version number must be synchronised in `Ouress.lpi` and `release.vars` to avoid ambiguities. An entry for the corresponding version should be made to the [key decisions log](key-decisions-log.md), if necessary.
-* Shell scripts and associated files for building the `rootfs` must be encoded in UTF-8 (strictly without BOM) to ensure that UTF-8 characters are rendered correctly in the shell of the built artifact.
-* Pascal source code must be encoded in UTF-8 with BOM for UTF-8 characters to be rendered correctly on the terminal by the Windows command-line utility.
-* The `.nsi` script must be encoded in UTF-8 with a BOM to avoid incorrect metadata recording for UTF-8 characters in the installer’s properties.
+> [!NOTE]
+>
+> * The version number must be synchronised in `Ouress.lpi` and `release.vars` to avoid ambiguities. An entry for the corresponding version should be made to the [key decisions log](key-decisions-log.md), if necessary.
+> * Shell scripts and associated files for building the `rootfs` must be encoded in UTF-8 (strictly without BOM) to ensure that UTF-8 characters are rendered correctly in the shell of the built artefact.
+> * Pascal source code must be encoded in UTF-8 with BOM for UTF-8 characters to be rendered correctly on the terminal by the Windows command-line utility.
+> * The `.nsi` script must be encoded in UTF-8 with a BOM to avoid incorrect metadata recording for UTF-8 characters in the installer’s properties.
 
 ## Acknowledgements
 
@@ -307,4 +321,4 @@ The project has benefited significantly from the assistance of Anthropic’s [Cl
 
 The Ouress build scripts, Windows command-line management utility, and environment configurations are under the BSD 3-Clause License. The full project is provided “as is”, without any warranties. Please see the [LICENSE](LICENSE) file for details.
 
-The project bundles and distributes several third-party open-source libraries, binaries, and resources. These components are governed entirely by their respective licenses, and the Ouress project claims no copyright over them. System tools and utilities installed via the *Debian* package manager (`apt`) retain their original license texts within the root filesystem at `/usr/share/doc/*/copyright`. Please see the accompanying [NOTICE](NOTICE) file for details.
+The project bundles and distributes several third-party open-source libraries, binaries, and resources. These components are governed entirely by their respective licenses, and the Ouress project claims no copyright over them. System tools and utilities installed via the *Debian* package manager retain their original license texts within the root filesystem at `/usr/share/doc/*/copyright`. Please see the accompanying [NOTICE](NOTICE) file for details.

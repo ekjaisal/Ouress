@@ -19,9 +19,10 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="87"/>
+      <MinorVersionNr Value="1"/>
+      <BuildNr Value="1"/>
       <Language Value="0809"/>
-      <StringTable Comments="An Opinionated Underlabouring Research Environment for the Social Sciences" CompanyName="Jaisal E. K." FileDescription="Ouress" InternalName="Ouress" LegalCopyright="© 2026 Jaisal E. K." OriginalFilename="Ouress.exe" ProductName="Ouress" ProductVersion="1.0.0"/>
+      <StringTable Comments="An Opinionated Underlabouring Research Environment for the Social Sciences" CompanyName="Jaisal E. K." FileDescription="Ouress" InternalName="Ouress" LegalCopyright="© 2026 Jaisal E. K." OriginalFilename="Ouress.exe" ProductName="Ouress" ProductVersion="1.1.0"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Debug" Default="True"/>
@@ -30,7 +31,7 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="..\bin\Ouress"/>
+            <Filename Value="..\..\bin\Ouress"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -84,7 +85,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\bin\Ouress"/>
+      <Filename Value="..\..\bin\Ouress"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

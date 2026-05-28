@@ -1,24 +1,21 @@
 #!/bin/bash
 
-# BSD 3-Clause License
-# ____________________
-# 
 # Copyright © 2026, Jaisal E. K.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
-# 
-# 2. Redistributions in binary form must reproduce the above copyright notice,
-#    this list of conditions and the following disclaimer in the documentation
-#    and/or other materials provided with the distribution.
-# 
-# 3. Neither the name of the copyright holder nor the names of its
-#    contributors may be used to endorse or promote products derived from
-#    this software without specific prior written permission.
-# 
+#
+#   1. Redistributions of source code must retain the above copyright notice,
+#      this list of conditions and the following disclaimer.
+#
+#   2. Redistributions in binary form must reproduce the above copyright notice,
+#      this list of conditions and the following disclaimer in the documentation
+#      and/or other materials provided with the distribution.
+#
+#   3. Neither the name of the copyright holder nor the names of its
+#      contributors may be used to endorse or promote products derived from
+#      this software without specific prior written permission.
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -43,12 +40,10 @@ if [ "$EUID" -ne 0 ]; then
     echo "Error: This script must be run as root (use sudo)."
     exit 1
 fi
-
 if ! command -v debootstrap >/dev/null 2>&1; then
     echo "Error: debootstrap is required but not installed."
     exit 1
 fi
-
 if ! command -v xz >/dev/null 2>&1; then
     echo "Error: xz-utils is required but not installed."
     exit 1
@@ -78,9 +73,9 @@ fi
 
 echo "==> Resolving Ouress documentation..."
 mkdir -p "${ROOTFS_DIR}/usr/share/doc/ouress"
-sed '1s/^\xEF\xBB\xBF//' ../LICENSE > "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
-echo -e "\n\nThird-Party Notices\n___________________\n" >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
-sed '1s/^\xEF\xBB\xBF//' ../NOTICE >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
+sed '1s/^\xEF\xBB\xBF//' ../../LICENSE > "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
+echo -e "\n\n----------------------------------------------------------------------------------\n" >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
+sed '1s/^\xEF\xBB\xBF//' ../../NOTICE >> "${ROOTFS_DIR}/usr/share/doc/ouress/copyright"
 
 echo "==> Applying release metadata..."
 mkdir -p "${ROOTFS_DIR}/etc/ouress"
@@ -126,8 +121,8 @@ cleanup
 trap - EXIT INT TERM
 
 echo "==> Packaging distribution artifact..."
-mkdir -p ../releases
-env XZ_OPT="-9e -T0" tar -cJf "../releases/${ARTIFACT_NAME}" -C "${ROOTFS_DIR}" .
+mkdir -p ../../releases
+env XZ_OPT="-9e -T0" tar -cJf "../../releases/${ARTIFACT_NAME}" -C "${ROOTFS_DIR}" .
 
-echo "==> Build successful: $(cd ../releases && pwd)/${ARTIFACT_NAME}"
-ls -lh "../releases/${ARTIFACT_NAME}"
+echo "==> Build successful: $(cd ../../releases && pwd)/${ARTIFACT_NAME}"
+ls -lh "../../releases/${ARTIFACT_NAME}"
