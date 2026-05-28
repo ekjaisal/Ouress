@@ -37,4 +37,4 @@ gron   tgz     https://github.com/tomnomnom/gron/releases/download/v0.7.1/gron-l
 yq     raw     https://github.com/mikefarah/yq/releases/download/v4.53.2/yq_linux_amd64                                 d56bf5c6819e8e696340c312bd70f849dc1678a7cda9c2ad63eebd906371d56b
 jqp    tar.gz  https://github.com/noahgorstein/jqp/releases/download/v0.8.0/jqp_Linux_x86_64.tar.gz                     66b2a100ff114a8bbe45a8e6052269fb2f4c61de4edd5ea57b763bf2ec7c6593
 xidel  tar.gz  https://github.com/benibela/xidel/releases/download/Xidel_0.9.8/xidel-0.9.8.linux64.tar.gz               cf6d7391a73dbadf7c74e22206ea3f9f4f77f77d0e9d6e32d15ec400b1b843ef
-rush   tar.gz  https://github.com/shenwei356/rush/releases/download/v0.8.0/rush_linux_amd64.tar.gz                      cbf2df788c44ec134c9ba9ae7d3c9aaccb05690b481776795c618e42da7af045
+rush   tar.gz  https://github.com/shenwei356/rush/releases/download/v0.9.0/rush_linux_amd64.tar.gz                      436d935bcd0dc263d20674201cd3e9c85059d331d8641f970e1e8958ad0af4fc
